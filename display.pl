@@ -1,0 +1,18 @@
+show(X):- 
+    write('   b b b b b b b b   '), nl,
+    write('a  o o o o o o o o  a'), nl,
+    write('a   x x x x x x x   a'), nl,
+    write('a  o o o o o o o o  a'), nl,
+    write('a   x x x x x x x   a'), nl,
+    write('a  o o o o o o o o  a'), nl,
+    write('a   x x x x x x x   a'), nl,
+    write('a  o o o o o o o o  a'), nl,
+    write('a   x x x x x x x   a'), nl,   
+    write('a  o o o o o o o o  a'), nl,
+    write('a   o x x x x x x   a'), nl,
+    write('a  o o o o o o o o  a'), nl,
+    write('a   x x x x x x x   a'), nl,  
+    write('a  o o o o o o o o  a'), nl,
+    write('a   x x x x x x x   a'), nl,
+    write('a  o o o o o o o o  a'), nl,
+    write('   b b b b b b b b   '), nl.
