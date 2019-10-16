@@ -22,3 +22,8 @@ oformatSquare(S,6):-
 oformatSquare(S,R):-
 	square(_,S,R,C), format('  ~a ', [C]),
 	 R1 is R+1, R1 < 7, oformatSquare(S,R1).	
+
+display_game(+Board,+Player):-
+	write('    b b b b b b b b b b b b b b b'),nl,nl,
+	oformatBoard(0), nl,
+	write('    b b b b b b b b b b b b b b b').
