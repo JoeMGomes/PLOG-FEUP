@@ -8,12 +8,12 @@ oformatLine(X,Y):-
 	 Y1 is Y+1, Y1 < 8, oformatLine(X,Y1).	
 
 oformatBoard(7):-
-	write('a   '),oformatLine(7,0), write('a'), nl.
+	write('@   '),oformatLine(7,0), write('@'), nl.
 
 oformatBoard(X):-
-	write('a   '), oformatLine(X,0), write('a'), nl,
+	write('@   '), oformatLine(X,0), write('@'), nl,
 	X1 is X+1, X1 < 8,
-	write('a   '),oformatSquare(X,0),write('    a'), nl,
+	write('@   '),oformatSquare(X,0),write('    @'), nl,
 	oformatBoard(X1).
 
 oformatSquare(S,6):-
