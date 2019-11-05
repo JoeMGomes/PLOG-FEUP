@@ -27,3 +27,21 @@ display_game(+Board,+Player):-
 	write('    b b b b b b b b b b b b b b b'),nl,nl,
 	oformatBoard(0), nl,
 	write('    b b b b b b b b b b b b b b b').
+
+replaceFact(OldFact, NewFact) :-
+(   call(OldFact)
+->  retract(OldFact),
+	assertz(NewFact);
+	true
+).
+
+isUsed(Row, Col):-
+	octo(Row, Col,X,_,_,_,_),
+	\+ (X = '.').
+
+
+placePiece(Player, Row, Col):-
+	(Player = 'b' ; Player = '@'),
+	\+isUsed(Row, Col),
+	replaceFact(octo(Row, Col,X,A,B,C,D),octo(Row, Col,Player,A,B,C,D)).
+
