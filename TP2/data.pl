@@ -1,3 +1,5 @@
+:- dynamic octo/7.
+
 octo(0,0,.,nn,nn,nn, 0).
 octo(0,1,.,nn,nn, 0, 1).
 octo(0,2,.,nn,nn, 1, 2).
