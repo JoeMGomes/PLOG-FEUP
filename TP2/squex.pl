@@ -49,16 +49,19 @@ placeSquareCE(Player, Row, Col):-
 	octo(Row,Col,_,X,_,_,_),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 placeSquareCD(Player, Row, Col):-
-	checkCorner(Player, Row-1,Col+1),
-	octo(Row,Col,_,X,_,_,_),
+	R1 is Row-1, C1 is Col+1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,_,X,_,_),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 placeSquareBE(Player, Row, Col):-
-	checkCorner(Player, Row+1,Col-1),
-	octo(Row,Col,_,X,_,_,_),
+	R1 is Row+1, C1 is Col-1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,_,_,X,_),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 placeSquareBD(Player, Row, Col):-
-	checkCorner(Player, Row+1,Col+1),
-	octo(Row,Col,_,X,_,_,_),
+	R1 is Row+1, C1 is Col+1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,_,_,_,X),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 
 
