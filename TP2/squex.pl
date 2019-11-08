@@ -66,11 +66,10 @@ placeSquareBD(Player, Row, Col):-
 
 
 placeSquares(Player, Row, Col):-
-	placeSquareCE(Player, Row, Col),
-	placeSquareCD(Player, Row, Col),
-	placeSquareBE(Player, Row, Col),
-	placeSquareBD(Player, Row, Col);
-	true.
+	placeSquareCE(Player, Row, Col);true,
+	placeSquareCD(Player, Row, Col);true,
+	placeSquareBE(Player, Row, Col);true,
+	placeSquareBD(Player, Row, Col);true.
 
 placePiece(Player, Row, Col):-
 	(Player = 'b' ; Player = '@'),
