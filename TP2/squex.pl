@@ -73,7 +73,24 @@ placeSquares(Player, Row, Col):-
 
 placePiece(Player, Row, Col):-
 	(Player = 'b' ; Player = '@'),
+
 	\+isUsed(Row, Col),
-	replaceFact(octo(Row, Col,X,A,B,C,D),octo(Row, Col,Player,A,B,C,D)),
+	replaceFact(octo(Row, Col,_,A,B,C,D),octo(Row, Col,Player,A,B,C,D)),
 	placeSquares(Player,Row,Col).
 
+
+play(Row, Col):-
+	turn(X),
+	(X =< 0 ->
+		N is X+2,
+		replaceFact(turn(x), turn(N)),
+		placePiece('b', Row, Col)
+	;		
+		N is X-2,
+		replaceFact(turn(X), turn(N)),
+		placePiece('@', Row, Col)
+		).	
+
+
+
+	

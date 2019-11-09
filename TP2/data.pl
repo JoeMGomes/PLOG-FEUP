@@ -1,5 +1,8 @@
 :- dynamic octo/7.
 :- dynamic square/4.
+:- dynamic turn/1.
+
+turn(1).
 
 octo(0,0,.,nn,nn,nn, 0).
 octo(0,1,.,nn,nn, 0, 1).
