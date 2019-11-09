@@ -83,7 +83,7 @@ play(Row, Col):-
 	turn(X),
 	(X =< 0 ->
 		N is X+2,
-		replaceFact(turn(x), turn(N)),
+		replaceFact(turn(X), turn(N)),
 		placePiece('b', Row, Col)
 	;		
 		N is X-2,
