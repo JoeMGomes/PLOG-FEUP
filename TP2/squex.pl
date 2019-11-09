@@ -39,9 +39,41 @@ isUsed(Row, Col):-
 	octo(Row, Col,X,_,_,_,_),
 	\+ (X = '.').
 
+checkCorner(Player, Row, Col):-
+	octo(Row,Col,X,_,_,_,_),
+	X = Player.
+
+placeSquareCE(Player, Row, Col):-
+	R1 is Row-1, C1 is Col-1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,X,_,_,_),
+	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+placeSquareCD(Player, Row, Col):-
+	R1 is Row-1, C1 is Col+1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,_,X,_,_),
+	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+placeSquareBE(Player, Row, Col):-
+	R1 is Row+1, C1 is Col-1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,_,_,X,_),
+	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+placeSquareBD(Player, Row, Col):-
+	R1 is Row+1, C1 is Col+1,
+	checkCorner(Player, R1,C1),
+	octo(Row,Col,_,_,_,_,X),
+	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+
+
+placeSquares(Player, Row, Col):-
+	placeSquareCE(Player, Row, Col);true,
+	placeSquareCD(Player, Row, Col);true,
+	placeSquareBE(Player, Row, Col);true,
+	placeSquareBD(Player, Row, Col);true.
 
 placePiece(Player, Row, Col):-
 	(Player = 'b' ; Player = '@'),
 	\+isUsed(Row, Col),
-	replaceFact(octo(Row, Col,X,A,B,C,D),octo(Row, Col,Player,A,B,C,D)).
+	replaceFact(octo(Row, Col,X,A,B,C,D),octo(Row, Col,Player,A,B,C,D)),
+	placeSquares(Player,Row,Col).
 
