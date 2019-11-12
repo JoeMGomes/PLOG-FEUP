@@ -1,4 +1,4 @@
-:- dynamic octo/7.
+:- dynamic octo/8.
 :- dynamic square/4.
 :- dynamic turn/1.
 :- dynamic end/1.

@@ -43,26 +43,38 @@ checkCorner(Player, Row, Col):-
 	octo(_,Row,Col,X,_,_,_,_),
 	X = Player.
 
+checkCut(SquareID,Player):-
+	square(SquareID,A,B,S),
+	(S \== Player , S \== x)->(
+	turn(T),	
+	T1 is T * 3,
+	replaceFact(turn(T), turn(T1))
+	).
+
 placeSquareCE(Player, Row, Col):-
 	R1 is Row-1, C1 is Col-1,
 	checkCorner(Player, R1,C1),
 	octo(_,Row,Col,_,X,_,_,_),
-	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+	replaceFact(square(X,A,B,_),square(X,A,B,Player)),
+checkCut(X,Player).
 placeSquareCD(Player, Row, Col):-
 	R1 is Row-1, C1 is Col+1,
 	checkCorner(Player, R1,C1),
 	octo(_,Row,Col,_,_,X,_,_),
-	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+	replaceFact(square(X,A,B,_),square(X,A,B,Player)),
+	checkCut(X,Player).
 placeSquareBE(Player, Row, Col):-
 	R1 is Row+1, C1 is Col-1,
 	checkCorner(Player, R1,C1),
 	octo(_,Row,Col,_,_,_,X,_),
-	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+	replaceFact(square(X,A,B,_),square(X,A,B,Player)),
+	checkCut(X,Player).
 placeSquareBD(Player, Row, Col):-
 	R1 is Row+1, C1 is Col+1,
 	checkCorner(Player, R1,C1),
 	octo(_,Row,Col,_,_,_,_,X),
-	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
+	replaceFact(square(X,A,B,_),square(X,A,B,Player)),
+	checkCut(X,Player).
 
 
 placeSquares(Player, Row, Col):-
@@ -72,8 +84,6 @@ placeSquares(Player, Row, Col):-
 	placeSquareBD(Player, Row, Col);true.
 
 placePiece(Player, Row, Col):-
-	(Player = 'b' ; Player = '@'),
-
 	\+isUsed(Row, Col),
 	replaceFact(octo(_,Row, Col,_,A,B,C,D),octo(_,Row, Col,Player,A,B,C,D)),
 	placeSquares(Player,Row,Col).
@@ -82,14 +92,19 @@ placePiece(Player, Row, Col):-
 play(Row, Col):-
 	turn(X),
 	(X =< 0 ->
-		N is X+2,
-		replaceFact(turn(X), turn(N)),
-		placePiece('b', Row, Col)
-	;		
-		N is X-2,
-		replaceFact(turn(X), turn(N)),
-		placePiece('@', Row, Col)
-	).
+		(
+			placePiece('b', Row, Col),
+			N is X+2,
+			replaceFact(turn(X), turn(N))
+		)
+	;	
+		(	
+			placePiece('@', Row, Col),
+			N is X-2,
+			replaceFact(turn(X), turn(N))
+		)
+	),
+	display_game(_,_).
 
 
 
