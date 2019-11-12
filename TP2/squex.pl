@@ -1,10 +1,10 @@
 :- consult('data.pl').
 
 oformatLine(X,7):-
-	octo(X,7,C,_,_,_,_), format('~a   ', [C]).
+	octo(_,X,7,C,_,_,_,_), format('~a   ', [C]).
 
 oformatLine(X,Y):-
-	octo(X,Y,C,_,_,_,_), format('~a   ', [C]),
+	octo(_,X,Y,C,_,_,_,_), format('~a   ', [C]),
 	 Y1 is Y+1, Y1 < 8, oformatLine(X,Y1).	
 
 oformatBoard(7):-
@@ -36,32 +36,32 @@ replaceFact(OldFact, NewFact) :-
 ).
 
 isUsed(Row, Col):-
-	octo(Row, Col,X,_,_,_,_),
+	octo(_,Row, Col,X,_,_,_,_),
 	\+ (X = '.').
 
 checkCorner(Player, Row, Col):-
-	octo(Row,Col,X,_,_,_,_),
+	octo(_,Row,Col,X,_,_,_,_),
 	X = Player.
 
 placeSquareCE(Player, Row, Col):-
 	R1 is Row-1, C1 is Col-1,
 	checkCorner(Player, R1,C1),
-	octo(Row,Col,_,X,_,_,_),
+	octo(_,Row,Col,_,X,_,_,_),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 placeSquareCD(Player, Row, Col):-
 	R1 is Row-1, C1 is Col+1,
 	checkCorner(Player, R1,C1),
-	octo(Row,Col,_,_,X,_,_),
+	octo(_,Row,Col,_,_,X,_,_),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 placeSquareBE(Player, Row, Col):-
 	R1 is Row+1, C1 is Col-1,
 	checkCorner(Player, R1,C1),
-	octo(Row,Col,_,_,_,X,_),
+	octo(_,Row,Col,_,_,_,X,_),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 placeSquareBD(Player, Row, Col):-
 	R1 is Row+1, C1 is Col+1,
 	checkCorner(Player, R1,C1),
-	octo(Row,Col,_,_,_,_,X),
+	octo(_,Row,Col,_,_,_,_,X),
 	replaceFact(square(X,_,_,_),square(X,_,_,Player)).
 
 
@@ -75,7 +75,7 @@ placePiece(Player, Row, Col):-
 	(Player = 'b' ; Player = '@'),
 
 	\+isUsed(Row, Col),
-	replaceFact(octo(Row, Col,_,A,B,C,D),octo(Row, Col,Player,A,B,C,D)),
+	replaceFact(octo(_,Row, Col,_,A,B,C,D),octo(_,Row, Col,Player,A,B,C,D)),
 	placeSquares(Player,Row,Col).
 
 
@@ -89,8 +89,68 @@ play(Row, Col):-
 		N is X-2,
 		replaceFact(turn(X), turn(N)),
 		placePiece('@', Row, Col)
-		).	
+	).
 
 
+
+floodWhite(Row, Col):-
+	octo(Id,Row, Col , Player, C1, C2, C3, C4),
+	Player = '@', !,
+	visited(Id, X),
+	end(E),
+	write(E),nl,
+	X = 0,
+	replaceFact(visited(Id,_), visited(Id, 1)),
+	(Col = 7 ->
+		replaceFact(end(_), end(1)),
+		write("@ wins!")
+	;
+	R is Row+1,
+	C is Col,
+	floodWhite(N, C),
+	R is Row-1,
+	C is Col,
+	floodWhite(N, C),
+	R is Row,
+	C is Col+1,
+	floodWhite(N, C),
+	R is Row,
+	C is Col-1,
+	floodWhite(N, C),
+
+	(\+(C1 = 'nn') ->
+		(square(C1,_,_,S1),
+		S1 = '@' ->
+		R is Row-1,
+		C is Col-1,
+		floodWhite(R,C)
+		)),
+
+	(\+(C2 = 'nn') ->
+		(square(C2,_,_,S2),
+		S2 = '@' ->
+		R is Row-1,
+		C is Col+1,
+		floodWhite(R,C)
+		)),
+	
+	(\+(C3 = 'nn') ->
+		(square(C3,_,_,S3),
+		S3 = '@' ->
+		R is Row+1,
+		C is Col-1,
+		floodWhite(R,C)
+		)),
+
+	(\+(C4 = 'nn') ->
+		(square(C4,_,_,S4),
+		S4 = '@' ->
+		R is Row+1,
+		C is Col+1,
+		floodWhite(R,C)
+		))
+    ). 
+	
 
 	
+
