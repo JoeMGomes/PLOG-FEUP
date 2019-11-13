@@ -40,7 +40,7 @@ isUsed(Row, Col):-
 	octo(_,Row, Col,X,_,_,_,_),
 	\+ (X = '.').
 
-checkCorner(Player, Row, Col):-
+checkOcto(Player, Row, Col):-
 	octo(_,Row,Col,X,_,_,_,_),
 	X = Player.
 
@@ -54,26 +54,34 @@ checkCut(SquareID,Player):-
 
 placeSquareCE(Player, Row, Col):-
 	R1 is Row-1, C1 is Col-1,
-	checkCorner(Player, R1,C1),
+	checkOcto(Player, R1,C1),
 	octo(_,Row,Col,_,X,_,_,_),
+	octo(ID1,R1,C1,_,_,_,_,_),
+	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 placeSquareCD(Player, Row, Col):-
 	R1 is Row-1, C1 is Col+1,
-	checkCorner(Player, R1,C1),
+	checkOcto(Player, R1,C1),
 	octo(_,Row,Col,_,_,X,_,_),
+	octo(ID1,R1,C1,_,_,_,_,_),
+	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 placeSquareBE(Player, Row, Col):-
 	R1 is Row+1, C1 is Col-1,
-	checkCorner(Player, R1,C1),
+	checkOcto(Player, R1,C1),
 	octo(_,Row,Col,_,_,_,X,_),
+	octo(ID1,R1,C1,_,_,_,_,_),
+	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 placeSquareBD(Player, Row, Col):-
 	R1 is Row+1, C1 is Col+1,
-	checkCorner(Player, R1,C1),
-	octo(_,Row,Col,_,_,_,_,X),
+	checkOcto(Player, R1,C1),
+	octo(ID,Row,Col,_,_,_,_,X),
+	octo(ID1,R1,C1,_,_,_,_,_),
+	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 

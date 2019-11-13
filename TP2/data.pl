@@ -2,10 +2,33 @@
 :- dynamic square/4.
 :- dynamic turn/1.
 :- dynamic end/1.
-:- (dynamic visited/2).
+:- dynamic visited/2.
 
 turn(1).
 end(0).
+
+edge(0,1).
+edge(1,2).
+edge(2,3).
+edge(3,4).
+edge(4,5).
+edge(5,6).
+edge(6,7).
+edge(1,9).
+edge(9,18).
+edge(18,11).
+edge(11,4).
+edge(11,3).
+
+addEdge(X,Y):-
+    assert(edge(Y,X)),
+    assert(edge(X,Y)).
+
+removeEdge(X,Y):-
+    retract(edge(Y,X)),
+    retract(edge(X,Y)).
+    
+
 
 octo(0 ,0,0,@,nn,nn,nn, 0).
 octo(1 ,0,1,@,nn,nn, 0, 1).
@@ -17,9 +40,9 @@ octo(6 ,0,6,@,nn,nn, 5, 6).
 octo(7 ,0,7,@,nn,nn, 6,nn).
 
 octo(8 ,1,0,.,nn, 0,nn, 7).
-octo(9 ,1,1,., 0, 1, 7, 8).
+octo(9 ,1,1,@, 0, 1, 7, 8).
 octo(10,1,2,., 1, 2, 8, 9).
-octo(11,1,3,., 2, 3, 9,10).
+octo(11,1,3,@, 2, 3, 9,10).
 octo(12,1,4,., 3, 4,10,11).
 octo(13,1,5,., 4, 5,11,12).
 octo(14,1,6,., 5, 6,12,13).
@@ -27,7 +50,7 @@ octo(15,1,7,., 6,nn,13,nn).
 
 octo(16,2,0,.,nn, 7,nn,14).
 octo(17,2,1,., 7, 8,14,15).
-octo(18,2,2,., 8, 9,15,16).
+octo(18,2,2,@, 8, 9,15,16).
 octo(19,2,3,., 9,10,16,17).
 octo(20,2,4,.,10,11,17,18).
 octo(21,2,5,.,11,12,18,19).
