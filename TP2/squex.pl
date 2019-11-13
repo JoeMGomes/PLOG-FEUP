@@ -24,6 +24,7 @@ oformatSquare(S,R):-
 	 R1 is R+1, R1 < 7, oformatSquare(S,R1).	
 
 display_game(+Board,+Player):-
+	write('    0   1   2   3   4   5   6   7'),nl,
 	write('    b b b b b b b b b b b b b b b'),nl,nl,
 	oformatBoard(0), nl,
 	write('    b b b b b b b b b b b b b b b').
@@ -78,10 +79,10 @@ placeSquareBD(Player, Row, Col):-
 
 
 placeSquares(Player, Row, Col):-
-	placeSquareCE(Player, Row, Col);true,
-	placeSquareCD(Player, Row, Col);true,
-	placeSquareBE(Player, Row, Col);true,
-	placeSquareBD(Player, Row, Col);true.
+	(placeSquareCE(Player, Row, Col);true),
+	(placeSquareCD(Player, Row, Col);true),
+	(placeSquareBE(Player, Row, Col);true),
+	(placeSquareBD(Player, Row, Col);true).
 
 placePiece(Player, Row, Col):-
 	\+isUsed(Row, Col),
