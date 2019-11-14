@@ -146,7 +146,7 @@ play(Row, Col):-
 	write('It is b\'s turn!')).
 
 
-
+%% stackoverflow.com/questions/21161624/define-graph-in-prolog-edge-and-path-finding-if-there-is-a-path-between-two-ve
 path(A,B) :-   % two nodes are connected, if
   walk(A,B,[]) % - if we can walk from one to the other,
   .            % first seeding the visited list with the empty list
