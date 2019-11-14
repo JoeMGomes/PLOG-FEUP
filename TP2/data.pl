@@ -136,3 +136,4 @@ square(45,6,3,x).
 square(46,6,4,x).
 square(47,6,5,x).
 square(48,6,6,x).
+

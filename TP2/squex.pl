@@ -27,7 +27,8 @@ display_game(+Board,+Player):-
 	write('    0   1   2   3   4   5   6   7'),nl,
 	write('    b b b b b b b b b b b b b b b'),nl,nl,
 	oformatBoard(0), nl,
-	write('    b b b b b b b b b b b b b b b').
+	write('    b b b b b b b b b b b b b b b'), nl.
+	
 
 replaceFact(OldFact, NewFact) :-
 (   call(OldFact)
@@ -106,6 +107,7 @@ placeEdge(Player,Row,Col, ID1):-
 	octo(ID,Row,Col,_,_,_,_,_),
 	addEdge(ID,ID1).
 
+
 placePiece(Player, Row, Col):-
 	\+isUsed(Row, Col),
 	replaceFact(octo(ID,Row, Col,_,A,B,C,D),octo(ID,Row, Col,Player,A,B,C,D)),
@@ -138,7 +140,11 @@ play(Row, Col):-
 		)
 	),
 	checkAllWhite(0);true,
-	display_game(_,_).
+	display_game(_,_),
+	turn(X),
+	(X>0 , write('It is @\'s turn!');
+	write('It is b\'s turn!')).
+
 
 
 path(A,B) :-   % two nodes are connected, if
@@ -156,23 +162,51 @@ walk(A,B,V) :-       % we can walk from A to B...
   .                  % Easy!
 
 
+checkAllBlack(7):-
+	octo(7,_,_,P,_,_,_,_),
+	P = b,
+	checkWinBlack(7,56).
+
+checkAllBlack(X):-
+	octo(X,_,_,P,_,_,_,_),
+	P = b,
+	checkWinBlack(X,56),
+	X1 is X+1, X1=<7,
+	checkAllBlack(X1).
+
+checkWinBlack(X,63):-
+	checkPath(X,63,-1).
+
+checkWinBlack(X,Y):-
+	(checkPath(X,Y,-1); true),
+	Y1 is Y+1, Y1 =< 63,
+	checkWinBlack(X,Y1).
+
+
 checkAllWhite(56):-
+	octo(56,_,_,P,_,_,_,_),
+	P = @,
 	checkWinWhite(56,7).
 
 checkAllWhite(X):-
+	octo(X,_,_,P,_,_,_,_),
+	P = @,
 	checkWinWhite(X,7),
 	X1 is X+8, X1=<56,
 	checkAllWhite(X1).
 
 checkWinWhite(X,63):-
-	checkPath(X,63).
+	checkPath(X,63,1).
 
 checkWinWhite(X,Y):-
-	(checkPath(X,Y); true),
+	(checkPath(X,Y,1); true),
 	Y1 is Y+8, Y1 =< 63,
 	checkWinWhite(X,Y1).
 
 
-checkPath(X,Y):-
+checkPath(X,Y,N):-
 	path(X,Y),
-	replaceFact(end(_), end(1)).
+	replaceFact(end(_), end(N)).
+
+
+
