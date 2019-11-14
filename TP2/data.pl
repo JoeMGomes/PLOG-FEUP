@@ -2,23 +2,11 @@
 :- dynamic square/4.
 :- dynamic turn/1.
 :- dynamic end/1.
-:- dynamic visited/2.
+:- dynamic edge/2.
 
 turn(1).
 end(0).
 
-edge(0,1).
-edge(1,2).
-edge(2,3).
-edge(3,4).
-edge(4,5).
-edge(5,6).
-edge(6,7).
-edge(1,9).
-edge(9,18).
-edge(18,11).
-edge(11,4).
-edge(11,3).
 
 addEdge(X,Y):-
     assert(edge(Y,X)),
@@ -30,19 +18,19 @@ removeEdge(X,Y):-
     
 
 
-octo(0 ,0,0,@,nn,nn,nn, 0).
-octo(1 ,0,1,@,nn,nn, 0, 1).
-octo(2 ,0,2,@,nn,nn, 1, 2).
-octo(3 ,0,3,@,nn,nn, 2, 3).
-octo(4 ,0,4,@,nn,nn, 3, 4).
-octo(5 ,0,5,@,nn,nn, 4, 5).
-octo(6 ,0,6,@,nn,nn, 5, 6).
-octo(7 ,0,7,@,nn,nn, 6,nn).
+octo(0 ,0,0,.,nn,nn,nn, 0).
+octo(1 ,0,1,.,nn,nn, 0, 1).
+octo(2 ,0,2,.,nn,nn, 1, 2).
+octo(3 ,0,3,.,nn,nn, 2, 3).
+octo(4 ,0,4,.,nn,nn, 3, 4).
+octo(5 ,0,5,.,nn,nn, 4, 5).
+octo(6 ,0,6,.,nn,nn, 5, 6).
+octo(7 ,0,7,.,nn,nn, 6,nn).
 
 octo(8 ,1,0,.,nn, 0,nn, 7).
-octo(9 ,1,1,@, 0, 1, 7, 8).
+octo(9 ,1,1,., 0, 1, 7, 8).
 octo(10,1,2,., 1, 2, 8, 9).
-octo(11,1,3,@, 2, 3, 9,10).
+octo(11,1,3,., 2, 3, 9,10).
 octo(12,1,4,., 3, 4,10,11).
 octo(13,1,5,., 4, 5,11,12).
 octo(14,1,6,., 5, 6,12,13).
@@ -50,7 +38,7 @@ octo(15,1,7,., 6,nn,13,nn).
 
 octo(16,2,0,.,nn, 7,nn,14).
 octo(17,2,1,., 7, 8,14,15).
-octo(18,2,2,@, 8, 9,15,16).
+octo(18,2,2,., 8, 9,15,16).
 octo(19,2,3,., 9,10,16,17).
 octo(20,2,4,.,10,11,17,18).
 octo(21,2,5,.,11,12,18,19).
@@ -101,71 +89,6 @@ octo(60,7,4,.,45,46,nn,nn).
 octo(61,7,5,.,46,47,nn,nn).
 octo(62,7,6,.,47,48,nn,nn).
 octo(63,7,7,.,48,nn,nn,nn).
-
-visited( 0, 0).
-visited( 1, 0).
-visited( 2, 0).
-visited( 3, 0).  
-visited( 4, 0).
-visited( 5, 0).
-visited( 6, 0).
-visited( 7, 0).
-visited( 8, 0).
-visited( 9, 0).
-visited(10, 0).
-visited(11, 0).  
-visited(12, 0).
-visited(13, 0).
-visited(14, 0).
-visited(15, 0).
-visited(16, 0).
-visited(17, 0).
-visited(18, 0).
-visited(19, 0).  
-visited(20, 0).
-visited(21, 0).
-visited(22, 0).
-visited(23, 0).
-visited(24, 0).
-visited(25, 0).
-visited(26, 0).
-visited(27, 0).  
-visited(28, 0).
-visited(29, 0).
-visited(30, 0).
-visited(31, 0).
-visited(32, 0).
-visited(33, 0).
-visited(34, 0).
-visited(35, 0).  
-visited(36, 0).
-visited(37, 0).
-visited(38, 0).
-visited(39, 0).
-visited(40, 0).
-visited(41, 0).
-visited(42, 0).
-visited(43, 0).
-visited(44, 0).
-visited(45, 0).
-visited(46, 0).
-visited(47, 0).
-visited(48, 0).
-visited(49, 0).
-visited(50, 0).
-visited(51, 0).  
-visited(52, 0).
-visited(53, 0).
-visited(54, 0).
-visited(55, 0).
-visited(56, 0).
-visited(57, 0).
-visited(58, 0).
-visited(59, 0).  
-visited(60, 0).
-visited(61, 0).
-visited(62, 0).
-visited(63, 0).
 
 square(0 ,0,0,x).
 square(1 ,0,1,x).

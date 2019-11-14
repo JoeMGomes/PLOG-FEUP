@@ -45,7 +45,7 @@ checkOcto(Player, Row, Col):-
 	X = Player.
 
 checkCut(SquareID,Player):-
-	square(SquareID,A,B,S),
+	square(SquareID,_,_,S),
 	(S \== Player , S \== x)->(
 	turn(T),	
 	T1 is T * -3,
@@ -55,7 +55,7 @@ checkCut(SquareID,Player):-
 placeSquareCE(Player, Row, Col):-
 	R1 is Row-1, C1 is Col-1,
 	checkOcto(Player, R1,C1),
-	octo(_,Row,Col,_,X,_,_,_),
+	octo(ID,Row,Col,_,X,_,_,_),
 	octo(ID1,R1,C1,_,_,_,_,_),
 	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
@@ -63,7 +63,7 @@ placeSquareCE(Player, Row, Col):-
 placeSquareCD(Player, Row, Col):-
 	R1 is Row-1, C1 is Col+1,
 	checkOcto(Player, R1,C1),
-	octo(_,Row,Col,_,_,X,_,_),
+	octo(ID,Row,Col,_,_,X,_,_),
 	octo(ID1,R1,C1,_,_,_,_,_),
 	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
@@ -71,7 +71,7 @@ placeSquareCD(Player, Row, Col):-
 placeSquareBE(Player, Row, Col):-
 	R1 is Row+1, C1 is Col-1,
 	checkOcto(Player, R1,C1),
-	octo(_,Row,Col,_,_,_,X,_),
+	octo(ID,Row,Col,_,_,_,X,_),
 	octo(ID1,R1,C1,_,_,_,_,_),
 	addEdge(ID, ID1),
 	(checkCut(X,Player);true),
@@ -94,7 +94,7 @@ placeSquares(Player, Row, Col):-
 
 placePiece(Player, Row, Col):-
 	\+isUsed(Row, Col),
-	replaceFact(octo(_,Row, Col,_,A,B,C,D),octo(_,Row, Col,Player,A,B,C,D)),
+	replaceFact(octo(ID,Row, Col,_,A,B,C,D),octo(ID,Row, Col,Player,A,B,C,D)),
 	placeSquares(Player,Row,Col).
 
 
@@ -119,68 +119,6 @@ play(Row, Col):-
 	),
 	display_game(_,_).
 
-
-
-floodWhite(Row, Col):-
-	octo(Id,Row, Col , Player, C1, C2, C3, C4),
-	Player = '@', !,
-	visited(Id, X),
-	end(E),
-	write(E),nl,
-	X = 0,
-	replaceFact(visited(Id,_), visited(Id, 1)),
-	(Col = 7 ->
-		replaceFact(end(_), end(1)),
-		write("@ wins!")
-	;
-	R is Row+1,
-	C is Col,
-	floodWhite(N, C),
-	R is Row-1,
-	C is Col,
-	floodWhite(N, C),
-	R is Row,
-	C is Col+1,
-	floodWhite(N, C),
-	R is Row,
-	C is Col-1,
-	floodWhite(N, C),
-
-	(\+(C1 = 'nn') ->
-		(square(C1,_,_,S1),
-		S1 = '@' ->
-		R is Row-1,
-		C is Col-1,
-		floodWhite(R,C)
-		)),
-
-	(\+(C2 = 'nn') ->
-		(square(C2,_,_,S2),
-		S2 = '@' ->
-		R is Row-1,
-		C is Col+1,
-		floodWhite(R,C)
-		)),
-	
-	(\+(C3 = 'nn') ->
-		(square(C3,_,_,S3),
-		S3 = '@' ->
-		R is Row+1,
-		C is Col-1,
-		floodWhite(R,C)
-		)),
-
-	(\+(C4 = 'nn') ->
-		(square(C4,_,_,S4),
-		S4 = '@' ->
-		R is Row+1,
-		C is Col+1,
-		floodWhite(R,C)
-		))
-    ). 
-	
-
-	
 
 path(A,B) :-   % two nodes are connected, if
   walk(A,B,[]) % - if we can walk from one to the other,
