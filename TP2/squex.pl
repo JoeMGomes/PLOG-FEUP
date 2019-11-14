@@ -44,12 +44,13 @@ checkOcto(Player, Row, Col):-
 	octo(_,Row,Col,X,_,_,_,_),
 	X = Player.
 
-checkCut(SquareID,Player):-
+checkCut(SquareID,Player, ID1,ID2):-
 	square(SquareID,_,_,S),
 	(S \== Player , S \== x)->(
 	turn(T),	
 	T1 is T * -3,
-	replaceFact(turn(T), turn(T1))
+	replaceFact(turn(T), turn(T1)),
+	removeEdge(ID1,ID2)
 	).
 
 placeSquareCE(Player, Row, Col):-
@@ -57,32 +58,40 @@ placeSquareCE(Player, Row, Col):-
 	checkOcto(Player, R1,C1),
 	octo(ID,Row,Col,_,X,_,_,_),
 	octo(ID1,R1,C1,_,_,_,_,_),
+	octo(ID2,Row,C1,_,_,_,_,_),
+	octo(ID3,R1,Col,_,_,_,_,_),
 	addEdge(ID, ID1),
-	(checkCut(X,Player);true),
+	(checkCut(X,Player,ID2,ID3);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 placeSquareCD(Player, Row, Col):-
 	R1 is Row-1, C1 is Col+1,
 	checkOcto(Player, R1,C1),
 	octo(ID,Row,Col,_,_,X,_,_),
 	octo(ID1,R1,C1,_,_,_,_,_),
+	octo(ID2,Row,C1,_,_,_,_,_),
+	octo(ID3,R1,Col,_,_,_,_,_),
 	addEdge(ID, ID1),
-	(checkCut(X,Player);true),
+	(checkCut(X,Player,ID2,ID3);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 placeSquareBE(Player, Row, Col):-
 	R1 is Row+1, C1 is Col-1,
 	checkOcto(Player, R1,C1),
 	octo(ID,Row,Col,_,_,_,X,_),
 	octo(ID1,R1,C1,_,_,_,_,_),
+	octo(ID2,Row,C1,_,_,_,_,_),
+	octo(ID3,R1,Col,_,_,_,_,_),
 	addEdge(ID, ID1),
-	(checkCut(X,Player);true),
+	(checkCut(X,Player,ID2,ID3);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 placeSquareBD(Player, Row, Col):-
 	R1 is Row+1, C1 is Col+1,
 	checkOcto(Player, R1,C1),
 	octo(ID,Row,Col,_,_,_,_,X),
 	octo(ID1,R1,C1,_,_,_,_,_),
+	octo(ID2,Row,C1,_,_,_,_,_),
+	octo(ID3,R1,Col,_,_,_,_,_),
 	addEdge(ID, ID1),
-	(checkCut(X,Player);true),
+	(checkCut(X,Player,ID2,ID3);true),
 	replaceFact(square(X,A,B,_),square(X,A,B,Player)).
 
 
@@ -92,10 +101,21 @@ placeSquares(Player, Row, Col):-
 	(placeSquareBE(Player, Row, Col);true),
 	(placeSquareBD(Player, Row, Col);true).
 
+placeEdge(Player,Row,Col, ID1):-
+	checkOcto(Player,Row,Col),
+	octo(ID,Row,Col,_,_,_,_,_),
+	addEdge(ID,ID1).
+
 placePiece(Player, Row, Col):-
 	\+isUsed(Row, Col),
 	replaceFact(octo(ID,Row, Col,_,A,B,C,D),octo(ID,Row, Col,Player,A,B,C,D)),
-	placeSquares(Player,Row,Col).
+	placeSquares(Player,Row,Col),
+	R1 is Row -1, R2 is Row +1, % check Hor and Vert edges
+	C1 is Col -1, C2 is Col +1,
+	(placeEdge(Player,R1,Col, ID);true),
+	(placeEdge(Player,R2,Col, ID);true),
+	(placeEdge(Player,Row,C1, ID);true),
+	(placeEdge(Player,Row,C2, ID);true).
 
 
 play(Row, Col):-
@@ -117,6 +137,7 @@ play(Row, Col):-
 			)
 		)
 	),
+	checkAllWhite(0);true,
 	display_game(_,_).
 
 
@@ -133,3 +154,25 @@ walk(A,B,V) :-       % we can walk from A to B...
     walk(X,B,[A|V])  %   - we can get to it from X
   )                  %
   .                  % Easy!
+
+
+checkAllWhite(56):-
+	checkWinWhite(56,7).
+
+checkAllWhite(X):-
+	checkWinWhite(X,7),
+	X1 is X+8, X1=<56,
+	checkAllWhite(X1).
+
+checkWinWhite(X,63):-
+	checkPath(X,63).
+
+checkWinWhite(X,Y):-
+	(checkPath(X,Y); true),
+	Y1 is Y+8, Y1 =< 63,
+	checkWinWhite(X,Y1).
+
+
+checkPath(X,Y):-
+	path(X,Y),
+	replaceFact(end(_), end(1)).
