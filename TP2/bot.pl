@@ -1,6 +1,7 @@
 :- consult('data.pl').
 :- consult('logic.pl').
 :- use_module(library(lists)).
+:- use_module(library(random)).
 
 isNotUsed(Id):-
 	octo(Id,_,_,X,_,_,_,_),

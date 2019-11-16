@@ -22,7 +22,7 @@ checkCut(SquareID,Player, ID1,ID2):-
 	square(SquareID,_,_,S),
 	(S \== Player , S \== x)->(
 	turn(T),
-	\+((T = -3);(T = 3)),
+	T \== -3,T \== 3,
 	T1 is T * -3,
 	replaceFact(turn(T), turn(T1)),
 	removeEdge(ID1,ID2)
@@ -112,48 +112,57 @@ walk(A,B,V) :-       % we can walk from A to B...
 
 
 checkAllBlack(7):-
+	end(0),
 	octo(7,_,_,P,_,_,_,_),
 	P = b,
 	checkWinBlack(7,56).
 
 checkAllBlack(X):-
+	end(0),
 	octo(X,_,_,P,_,_,_,_),
-	P = b,
-	checkWinBlack(X,56),
+	((P = b,
+	checkWinBlack(X,56));true),
 	X1 is X+1, X1=<7,
 	checkAllBlack(X1).
 
 checkWinBlack(X,63):-
+	end(0),
 	checkPath(X,63,-1).
 
 checkWinBlack(X,Y):-
-	(checkPath(X,Y,-1); true),
+	end(0),
+	(checkPath(X,Y,-1),!; true),
 	Y1 is Y+1, Y1 =< 63,
 	checkWinBlack(X,Y1).
 
 
 checkAllWhite(56):-
+	end(0),
 	octo(56,_,_,P,_,_,_,_),
 	P = @,
 	checkWinWhite(56,7).
 
 checkAllWhite(X):-
+	end(0),
 	octo(X,_,_,P,_,_,_,_),
-	P = @,
-	checkWinWhite(X,7),
+	((P = @,
+	checkWinWhite(X,7));true),
 	X1 is X+8, X1=<56,
 	checkAllWhite(X1).
 
 checkWinWhite(X,63):-
+	end(0),	
 	checkPath(X,63,1).
 
 checkWinWhite(X,Y):-
-	(checkPath(X,Y,1); true),
+	end(0),
+	((checkPath(X,Y,1),!); true),
 	Y1 is Y+8, Y1 =< 63,
 	checkWinWhite(X,Y1).
 
 
 checkPath(X,Y,N):-
+	end(0),
 	path(X,Y),
 	write('end changed'),nl,
 	replaceFact(end(_), end(N)).

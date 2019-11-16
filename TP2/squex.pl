@@ -61,38 +61,40 @@ play(Row, Col):-
 	write('It is b\'s turn!')).
 
 
+playBotRandom(64):-
+	write('ENDED').
 
 playBotRandom(T):-
-	T =< 63,
+	T < 64,
 	write(T), nl,
 	end(0),
 	turn(X),
 	(X =< 0 ->
-		(
+		(	
 			randomPlay('b'),
 			(turn(Y), Y =< 0 ->
 			(N is Y+2,
 			replaceFact(turn(Y), turn(N)));true
-			)
+		),
+		(checkAllBlack(0);true)
 		)
 	;	
-		(	
+		(
 			randomPlay('@'),
 			(turn(Y), Y >= 0 ->
 			(N is Y-2,
 			replaceFact(turn(Y), turn(N)));true
-			)
+			),
+			(checkAllWhite(0);true)
 		)
 	),
-	checkAllWhite(0);true,
-	checkAllBlack(0);true,
 
 	turn(Z),
 
 	display_game(_,_),
 	(Z>0 , write('It is @\'s turn!'), nl;
 	write('It is b\'s turn!'), nl),
-	T1 is T +1,
+	T1 is T +1, !,
 	playBotRandom(T1).
 
 	
