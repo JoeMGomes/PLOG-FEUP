@@ -93,8 +93,6 @@ placePiece(Player, Row, Col):-
 	(placeEdge(Player,Row,C1, ID);true),
 	(placeEdge(Player,Row,C2, ID);true).
 
-
-
 %% stackoverflow.com/questions/21161624/define-graph-in-prolog-edge-and-path-finding-if-there-is-a-path-between-two-ve
 path(A,B) :-   % two nodes are connected, if
   walk(A,B,[]) % - if we can walk from one to the other,

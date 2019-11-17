@@ -21,20 +21,24 @@ appendToList(List, Item):-
     nonvar(Start),
     (var(To_add), To_add=Item;appendToList([To_add|Rest], Item)).
 
+printList([]).
 
-testAllOctos(63, Player, List):-
-    ((checkFinalMove(63, Player), appendToList(List, 63));true).
+printList([X|List]):-
+    write(X),nl,
+    printList(List).
+
+testAllOctos(63, Player, List, Newlist):-
+    ((checkFinalMove(63, Player), append(List, [63], Newlist));append(List, [], Newlist)).
 
 
-testAllOctos(X, Player, List):-
-    ((checkFinalMove(X, Player), appendToList(List, X));true),
-    X1 is X+1, X < 63,
-    testAllOctos(X1, Player, List).
-
+testAllOctos(X, Player, List, Newlist):-
+    ((checkFinalMove(X, Player), append(List, [X], Newlist2));append(List, [], Newlist2)),
+    X1 is X+1, X =< 63,!,
+    testAllOctos(X1, Player, Newlist2, Newlist).
 
 smartPlay(Player):-
-    bagof(ID, checkFinalMove(ID,Player), List),
-    write(List).
+    testAllOctos(0,Player,X,A),
+    printList(A).
 
 checkFinalMove(ID,Player):-
     octo(ID,Row, Col,Piece,A,B,C,D),
