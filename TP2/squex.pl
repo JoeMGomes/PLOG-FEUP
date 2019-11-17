@@ -84,6 +84,49 @@ playBot(Level):-
 		(Z>0 , write('It is @\'s turn!'), nl;
 		write('It is b\'s turn!'), nl).	
 
+move(Row, Col):-
+	turn(X),
+	(X =< 0 ->
+		(
+			placePiece('b', Row, Col),
+			(turn(X), X =< 0 ->
+			(N is X+2,
+			replaceFact(turn(X), turn(N)));true
+			)
+		)
+	;	
+		(	
+			placePiece('@', Row, Col),
+			(turn(X), X >= 0 ->
+			(N is X-2,
+			replaceFact(turn(X), turn(N)));true
+			)
+		)
+	),
+	(game_over(_,Winner);true),
+	turn(X),
+	(X>0 , write('It is @\'s turn!');
+	write('It is b\'s turn!')).
+
+moveVsBot(Row, Col, Level):-
+	turn(X),
+	(X >= 0 ->
+		(	
+			placePiece('@', Row, Col),
+			(turn(X), X >= 0 ->
+			(N is X-2,
+			replaceFact(turn(X), turn(N)));true
+			)
+		)
+	),
+	(game_over(_,Winner);true),
+	turn(A),
+	(A < 0), 
+	((A = -3, playBot(Level));true),
+	playBot(Level),
+	(A>0 , write('It is @\'s turn!');
+	write('It is b\'s turn!')).
+	
 
 choose_move(Board, Level, Move):-
 	turn(X),
