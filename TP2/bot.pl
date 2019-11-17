@@ -23,13 +23,11 @@ appendToList(List, Item):-
 
 
 testAllOctos(63, Player, List):-
-    ((checkFinalMove(X, Player), appendToList(List, X));true).
+    ((checkFinalMove(63, Player), appendToList(List, 63));true).
 
 
 testAllOctos(X, Player, List):-
-    notrace,
-    ((checkFinalMove(X, Player));true),
-    trace,
+    ((checkFinalMove(X, Player), appendToList(List, X));true),
     X1 is X+1, X < 63,
     testAllOctos(X1, Player, List).
 
