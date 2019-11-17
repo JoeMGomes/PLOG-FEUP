@@ -11,7 +11,7 @@ isNotUsed(Id):-
 
 
 %gets a list of possible moves to make
-valid_moves(+Board, +Player, ListOfMoves):-
+valid_moves(Board, Player, ListOfMoves):-
     findall(X, octo(X,_,_,'.',_,_,_,_), ListOfMoves).
 
 
