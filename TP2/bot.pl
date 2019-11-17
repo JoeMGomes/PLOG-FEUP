@@ -38,7 +38,7 @@ testAllOctos(X, Player, List, Newlist):-
 
 
 %see if its possible to end with the next play
-%if yes plays that
+%if yes plays that if not does a randomPlay
 smartPlay(Player):-
     testAllOctos(0,Player,X,A),
     A \== [],
