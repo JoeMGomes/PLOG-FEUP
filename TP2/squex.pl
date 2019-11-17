@@ -31,10 +31,6 @@ display_game(+Board,+Player):-
 	oformatBoard(0), nl,
 	write('    b b b b b b b b b b b b b b b'), nl.
 	
-
-
-
-
 play(Row, Col):-
 	turn(X),
 	(X =< 0 ->
@@ -62,7 +58,7 @@ play(Row, Col):-
 
 
 playBotRandom(64):-
-	write('ENDED').
+	write('NO MORE MOVES AVAILABLE').
 
 playBotRandom(T):-
 	T < 64,
@@ -75,26 +71,31 @@ playBotRandom(T):-
 			(turn(Y), Y =< 0 ->
 			(N is Y+2,
 			replaceFact(turn(Y), turn(N)));true
-		),
-		(checkAllBlack(0);true)
 		)
+	)
 	;	
-		(
-			randomPlay('@'),
-			(turn(Y), Y >= 0 ->
-			(N is Y-2,
+	(
+		randomPlay('@'),
+		(turn(Y), Y >= 0 ->
+		(N is Y-2,
 			replaceFact(turn(Y), turn(N)));true
-			),
-			(checkAllWhite(0);true)
+			)
 		)
-	),
+		),
+		
+		turn(Z),
 
-	turn(Z),
-
-	display_game(_,_),
-	(Z>0 , write('It is @\'s turn!'), nl;
-	write('It is b\'s turn!'), nl),
-	T1 is T +1, !,
-	playBotRandom(T1).
-
-	
+		(game_over(_,Winner);true),
+		%display_game(_,_),
+		(Z>0 , write('It is @\'s turn!'), nl;
+		write('It is b\'s turn!'), nl),
+		T1 is T +1, !,
+		playBotRandom(T1).		
+		
+game_over(Board, Winner):-
+	(checkAllBlack(0);true),		
+	(checkAllWhite(0);true),
+	end(X),
+	((X > 0, Winner is 1); true),
+	((X < 0, Winner is -1); true),
+	X \== 0.

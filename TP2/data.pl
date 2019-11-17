@@ -87,6 +87,7 @@ octo(61,7,5,.,46,47,nn,nn).
 octo(62,7,6,.,47,48,nn,nn).
 octo(63,7,7,.,48,nn,nn,nn).
 
+square(nn, nn,nn, nn).
 square(0 ,0,0,x).
 square(1 ,0,1,x).
 square(2 ,0,2,x).
