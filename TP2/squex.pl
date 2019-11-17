@@ -31,7 +31,7 @@ display_game(+Board,+Player):-
 	oformatBoard(0), nl,
 	write('    b b b b b b b b b b b b b b b'), nl.
 	
-play(Row, Col):-
+move(Row, Col):-
 	turn(X),
 	(X =< 0 ->
 		(
@@ -50,24 +50,19 @@ play(Row, Col):-
 			)
 		)
 	),
-	checkAllWhite(0);true,
-	display_game(_,_),
+	(game_over(_,Winner);true),
 	turn(X),
 	(X>0 , write('It is @\'s turn!');
 	write('It is b\'s turn!')).
 
 
-playBotRandom(64):-
-	write('NO MORE MOVES AVAILABLE').
 
-playBotRandom(T):-
-	T < 64,
-	write(T), nl,
+playBot(Level):-
 	end(0),
 	turn(X),
 	(X =< 0 ->
 		(	
-			randomPlay('b'),
+			(Level = 1 ->randomPlay('b');smartPlay('b')),
 			(turn(Y), Y =< 0 ->
 			(N is Y+2,
 			replaceFact(turn(Y), turn(N)));true
@@ -75,7 +70,7 @@ playBotRandom(T):-
 	)
 	;	
 	(
-		randomPlay('@'),
+			(Level = 1 ->randomPlay('@');smartPlay('@')),
 		(turn(Y), Y >= 0 ->
 		(N is Y-2,
 			replaceFact(turn(Y), turn(N)));true
@@ -86,11 +81,20 @@ playBotRandom(T):-
 		turn(Z),
 
 		(game_over(_,Winner);true),
-		%display_game(_,_),
 		(Z>0 , write('It is @\'s turn!'), nl;
-		write('It is b\'s turn!'), nl),
-		T1 is T +1, !,
-		playBotRandom(T1).		
+		write('It is b\'s turn!'), nl).	
+
+
+choose_move(Board, Level, Move):-
+	turn(X),
+	X < 0,
+	playBot(Level).
+
+botVsbot(Level):-
+	end(0),
+	playBot(Level),!,
+	botVsbot(Level).
+    
 		
 game_over(Board, Winner):-
 	Winner is 0,
