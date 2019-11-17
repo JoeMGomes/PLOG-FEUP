@@ -93,6 +93,7 @@ playBotRandom(T):-
 		playBotRandom(T1).		
 		
 game_over(Board, Winner):-
+	Winner is 0,
 	(checkAllBlack(0);true),		
 	(checkAllWhite(0);true),
 	end(X),
