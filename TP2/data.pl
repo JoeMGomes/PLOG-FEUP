@@ -7,13 +7,6 @@
 turn(1).
 end(0).
 
-addEdge(X,Y):-
-    assert(edge(Y,X)),
-    assert(edge(X,Y)).
-
-removeEdge(X,Y):-
-    retract(edge(Y,X)),
-    retract(edge(X,Y)).
 
 octo(0 ,0,0,.,nn,nn,nn, 0).
 octo(1 ,0,1,.,nn,nn, 0, 1).
