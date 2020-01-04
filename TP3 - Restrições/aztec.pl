@@ -11,7 +11,7 @@ appendlist([H|T], List, Final) :-
 aztec(List) :-
     appendlist(List, [], NewList),
     aux_aztec(List),
-catch(labeling([], NewList),_,fail).
+    catch(labeling([max_regret], NewList),_,fail).
 
 aux_aztec([H|[]]).
 
@@ -31,8 +31,6 @@ constraints_list([H|List1], [H1 | [H2 | List2]]) :-
     ( H1 #> H2 #/\ 0 #= mod(H1, H2) #/\ H #= H1 / H2) #\/ % DIVISÂO LEFT RIGHT
     ( H1 #< H2 #/\ 0 #= mod(H2, H1) #/\ H #= H2 / H1)), % DIVISÃO RIGHt LEFT
     constraints_list(List1, [H2 | List2]).
-
-puzzle(1, [[4], [_, _], [8, _, 3], [_, _, _, _], [1, _, 5, _, 6]]).
 
 nTabs(0).
 nTabs(X):-
@@ -75,5 +73,19 @@ try(Size, Res):-
     append(Board,[], Res).
 
 generate(Size, Board):-
+    reset_timer,
     repeat,
-    try(Size, Board).
+    try(Size, Board),
+    print_time,
+    fd_statistics.
+
+reset_timer :- statistics(walltime,_).	
+print_time :-
+	statistics(walltime,[_,T]),
+	TS is ((T//10)*10)/1000,
+	nl, write('Time: '), write(TS), write('s'), nl, nl.
+
+puzzle(1, [[4], [_, _], [8, _, 3], [_, _, _, _], [1, _, 5, _, 6]]).
+puzzle(2, [[7], [_, _], [_, _, 9], [2, _, _, _], [_, _, _, 7, _],[4,_,1,_,_,5]]).
+puzzle(3, [[9], [_, _], [_, 8, _], [5, _, _, 6], [_, _, _, _, _],[2,_,_,3,_,5]]).
+puzzle(4, [[6], [_, _], [4, _, 8], [_, _, _, _], [_, _, _, 1, _],[2,_,7,_,_,4]]).
