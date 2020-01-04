@@ -1,4 +1,6 @@
 :- use_module(library(clpfd)).
+:- use_module(library(lists)).
+:- use_module(library(random)).
 
 appendlist([], Final, Final).
 
@@ -9,7 +11,7 @@ appendlist([H|T], List, Final) :-
 aztec(List) :-
     appendlist(List, [], NewList),
     aux_aztec(List),
-    labeling([], NewList).
+catch(labeling([], NewList),_,fail).
 
 aux_aztec([H|[]]).
 
@@ -40,7 +42,7 @@ nTabs(X):-
 
 displayPuzzle(List):-
     length(List, Size),
-    NewSize is Size -1,!,
+    NewSize is Size -1,!, nl,
     displayPuzzleAux(List, NewSize).
     
 
@@ -52,3 +54,26 @@ displayPuzzleAux([Line| List], Size):-
     write(Line), nl,
     NewSize is Size -1, !,
     displayPuzzleAux(List, NewSize).
+
+randOrAtom(C):-
+    maybe(0.2) -> random(0,10,C); true.
+
+createPyramid(Size, CurrLevel, Board, FinalBoard):-
+    CurrLevel =< Size,
+    length(Row, CurrLevel), maplist(randOrAtom, Row),
+    append(Board,[Row], Pyramid),
+    NextLevel is CurrLevel + 1,
+    createPyramid(Size, NextLevel, Pyramid, FinalBoard).
+
+createPyramid(_,_,FinalBoard, FinalBoard).
+
+try(Size, Res):-
+    createPyramid(Size, 1, [], Board),
+    findall(Board, aztec(Board), Possible),
+    length(Possible, 1),
+    length(Board, Size),    
+    append(Board,[], Res).
+
+generate(Size, Board):-
+    repeat,
+    try(Size, Board).
