@@ -11,12 +11,12 @@ appendlist([H|T], List, Final) :-
 aztec(List) :-
     appendlist(List, [], NewList),
     aux_aztec(List),
-    catch(labeling([max_regret], NewList),_,fail).
+    catch(labeling([], NewList),_,fail),%catch introduzido para compatibilidade com generate/2, não é necessário
 
 aux_aztec([H|[]]).
 
-aux_aztec([List|[ List1 | List2]]) :-
-    constraints_list(List, List1),
+aux_aztec([List|[ List1 | List2]]) :-%aplica restrições linha a linha
+    constraints_list(List, List1), %Aplica restrições a a cada elemento da uma linha
     aux_aztec([List1 | List2]).
 
 constraints_list([], List1).
@@ -43,7 +43,6 @@ displayPuzzle(List):-
     NewSize is Size -1,!, nl,
     displayPuzzleAux(List, NewSize).
     
-
 displayPuzzleAux([],_):-
     nl.
 
@@ -73,11 +72,8 @@ try(Size, Res):-
     append(Board,[], Res).
 
 generate(Size, Board):-
-    reset_timer,
     repeat,
-    try(Size, Board),
-    print_time,
-    fd_statistics.
+    try(Size, Board).
 
 reset_timer :- statistics(walltime,_).	
 print_time :-
